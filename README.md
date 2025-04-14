@@ -1,5 +1,7 @@
-This is just a pers project experimenting with injecting into 32 bit processes
-If you want to use, you have to specify a 32 bit PID for this to work
-pywin32 requires python 3.7
+Nothing more than a university project. 
 
-issues outside of above, good luck :)
+Depends heavily on win32api import - Python 3.7
+
+Just change the DLL path to your DLL
+
+Only works on 32bit processes - because of 32bit python i assume??
