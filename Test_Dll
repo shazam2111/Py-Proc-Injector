@@ -1,27 +1,22 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include <windows.h>
 
-// This is the function each thread will run
-DWORD WINAPI ShowMsgBox(LPVOID lpParam) {
-    MessageBoxA(NULL, "Boom!", "MessageBox", MB_OK | MB_ICONINFORMATION);
+// Pop a message box
+DWORD WINAPI ShowMsgBox()
+{
+    MessageBoxA(NULL, "Looks like your process was injected into!", "Get Injected", MB_OK | MB_ICONINFORMATION);
+    ShowMsgBox();
     return 0;
 }
 
-// This thread keeps creating more threads for message boxes
-DWORD WINAPI SpamMessageBoxes(LPVOID lpParam) {
-    while (true) {
-        CreateThread(NULL, 0, ShowMsgBox, NULL, 0, NULL);
-        Sleep(100); // Optional: to slow the madness a bit
-    }
-    return 0;
-}
 
 BOOL APIENTRY DllMain(HMODULE hModule,
     DWORD  ul_reason_for_call,
-    LPVOID lpReserved) {
-    if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
-        CreateThread(NULL, 0, SpamMessageBoxes, NULL, 0, NULL);
+    LPVOID lpReserved)
+{
+    if (ul_reason_for_call == DLL_PROCESS_ATTACH)
+    {
+        ShowMsgBox();
     }
     return TRUE;
 }
