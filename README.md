@@ -4,4 +4,4 @@ Depends heavily on win32api import - Python 3.7
 
 Just change the DLL path to your DLL
 
-Only works on 32bit processes - because of 32bit python i assume??
+Only works on 32bit processes 
